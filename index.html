@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> TrustLink - Phishing Detector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen flex items-center justify-center p-4">
+    <div class="container mx-auto max-w-xl">
+        <div class="bg-white shadow-2xl rounded-2xl overflow-hidden">
+            <div class="bg-gradient-to-r from-blue-500 to-purple-600 p-6">
+                <h1 class="text-3xl font-bold text-white text-center flex items-center justify-center">
+                    <i class="fas fa-shield-alt mr-3"></i>
+					TrustLink
+                </h1>
+                <p class="text-center text-blue-100 mt-2">Protect yourself from potential online threats</p>
+            </div>
+
+            <div class="p-6">
+                <div class="mb-4">
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="urlInput" 
+                            placeholder="Paste the URL you want to check" 
+                            class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent pr-12"
+                        >
+                        <span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+                            <i class="fas fa-link"></i>
+                        </span>
+                    </div>
+                </div>
+                
+                <button 
+                    id="checkButton" 
+                    class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg hover:from-blue-600 hover:to-purple-700 transition duration-300 flex items-center justify-center"
+                >
+                    <i class="fas fa-search mr-2"></i> Analyze URL
+                </button>
+
+                <div 
+                    id="loadingSpinner" 
+                    class="hidden mt-4 text-center"
+                >
+                    <div class="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full"></div>
+                    <p class="text-gray-600 mt-2">Analyzing URL...</p>
+                </div>
+                
+                <div 
+                    id="resultContainer" 
+                    class="mt-4 hidden rounded-lg p-4 shadow-md"
+                >
+                    <div class="flex items-center mb-3">
+                        <i 
+                            id="statusIcon" 
+                            class="mr-3 text-2xl"
+                        ></i>
+                        <h2 
+                            id="statusText" 
+                            class="text-xl font-bold"
+                        ></h2>
+                    </div>
+                    
+                    <div 
+                        id="confidenceContainer" 
+                        class="mb-3 flex items-center"
+                    >
+                        <span class="mr-2">Confidence:</span>
+                        <div 
+                            id="confidenceBar" 
+                            class="flex-grow h-2 bg-gray-200 rounded-full overflow-hidden"
+                        >
+                            <div 
+                                id="confidenceBarFill" 
+                                class="h-full transition-all duration-300"
+                            ></div>
+                        </div>
+                        <span 
+                            id="confidenceText" 
+                            class="ml-2 font-semibold"
+                        ></span>
+                    </div>
+                    
+                    <div 
+                        id="reasonsList" 
+                        class="bg-gray-50 rounded-lg p-3"
+                    >
+                        <h3 class="font-bold mb-2 text-gray-700">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            Potential Risks
+                        </h3>
+                        <ul 
+                            id="reasonsListContent" 
+                            class="list-disc list-inside text-gray-600"
+                        ></ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4 text-gray-600">
+            <p class="text-sm">
+                <i class="fas fa-info-circle mr-2"></i>
+                URL Guardian helps detect potential phishing sites. Always exercise caution online.
+				Copyright By MainEkDevolper.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('checkButton').addEventListener('click', async () => {
+            const urlInput = document.getElementById('urlInput');
+            const resultContainer = document.getElementById('resultContainer');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const statusText = document.getElementById('statusText');
+            const statusIcon = document.getElementById('statusIcon');
+            const confidenceText = document.getElementById('confidenceText');
+            const confidenceBarFill = document.getElementById('confidenceBarFill');
+            const reasonsListContent = document.getElementById('reasonsListContent');
+
+            // Reset previous results
+            resultContainer.classList.add('hidden');
+            loadingSpinner.classList.remove('hidden');
+
+            const url = urlInput.value.trim();
+            
+            if (!url) {
+                alert('Please enter a URL');
+                loadingSpinner.classList.add('hidden');
+                return;
+            }
+
+            try {
+                // Simulate loading time
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                const response = await fetch('/check_url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url: url })
+                });
+
+                const result = await response.json();
+
+                // Hide loading spinner
+                loadingSpinner.classList.add('hidden');
+                resultContainer.classList.remove('hidden');
+
+                // Status styling
+                statusText.textContent = result.status;
+                reasonsListContent.innerHTML = '';
+
+                // Set icon and color based on status
+                switch(result.status) {
+                    case 'Safe':
+                        statusIcon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                        resultContainer.className = 'mt-4 rounded-lg p-4 shadow-md bg-green-50';
+                        confidenceBarFill.className = 'h-full bg-green-500';
+                        break;
+                    case 'Suspicious':
+                        statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle text-yellow-500"></i>';
+                        resultContainer.className = 'mt-4 rounded-lg p-4 shadow-md bg-yellow-50';
+                        confidenceBarFill.className = 'h-full bg-yellow-500';
+                        break;
+                    case 'Malicious':
+                        statusIcon.innerHTML = '<i class="fas fa-times-circle text-red-500"></i>';
+                        resultContainer.className = 'mt-4 rounded-lg p-4 shadow-md bg-red-50';
+                        confidenceBarFill.className = 'h-full bg-red-500';
+                        break;
+                }
+
+                // Confidence display
+                confidenceText.textContent = `${result.confidence}%`;
+                confidenceBarFill.style.width = `${result.confidence}%`;
+
+                // Add reasons
+                if (result.reasons && result.reasons.length > 0) {
+                    result.reasons.forEach(reason => {
+                        const li = document.createElement('li');
+                        li.textContent = reason;
+                        reasonsListContent.appendChild(li);
+                    });
+                } else {
+                    const li = document.createElement('li');
+                    li.textContent = 'No specific risks detected';
+                    reasonsListContent.appendChild(li);
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                loadingSpinner.classList.add('hidden');
+                alert('An error occurred while checking the URL');
+            }
+        });
+    </script>
+</body>
+</html>
