@@ -35,4 +35,10 @@ False Positives/Negatives:
 Some URLs may be flagged incorrectly based on predefined heuristics.
 ![TrustLinkige](https://github.com/user-attachments/assets/032ef685-802d-4546-97be-0fd8b55578e1)
 ![TrustLinkimg3](https://github.com/user-attachments/assets/b9090b1a-c884-4c0b-ae28-adaa21656b2c)
+![TrustLinkimg4](https://github.com/user-attachments/assets/e967a822-7d18-4c49-bac0-941eb9fcf3fc)
+![TrustLinkimg5](https://github.com/user-attachments/assets/dcb801ed-11f0-4af2-b324-fe9cf42c6d5b)
+![TrustLinkimg7](https://github.com/user-attachments/assets/832bf5ab-a93a-4a95-94de-654e6ec97513)
+
+
+
 
