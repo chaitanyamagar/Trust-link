@@ -33,3 +33,4 @@ Static Analysis:
 Cannot detect phishing threats beyond the URL (e.g., suspicious page content).
 False Positives/Negatives:
 Some URLs may be flagged incorrectly based on predefined heuristics.
+![TrustLinkige](https://github.com/user-attachments/assets/032ef685-802d-4546-97be-0fd8b55578e1)
