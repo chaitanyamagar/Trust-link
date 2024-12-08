@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify, render_template
 app = Flask(__name__)
 
 # Configuration (replace with your actual VirusTotal API key)
-VIRUSTOTAL_API_KEY = 'ee63dc1a5887836ba49fe4a63fe69d1abeba0c2e6d0f6577fa48143b45326127'
+VIRUSTOTAL_API_KEY =""
 
 def validate_url(url):
     """Validate URL format"""
@@ -55,7 +55,7 @@ def check_virustotal(url):
         }
         params = {'url': url}
         response = requests.get(
-            'https://www.virustotal.com/api/v3/urls/analyse', 
+            '', 
             headers=headers, 
             params=params
         )
